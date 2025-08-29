@@ -9,11 +9,17 @@ interface ModalProps {
 
 export default function Modal({ onClose, children }: ModalProps) {
   useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = originalOverflow;
+    };
   }, [onClose]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
